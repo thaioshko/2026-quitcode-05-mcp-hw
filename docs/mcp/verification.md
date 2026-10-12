@@ -56,10 +56,33 @@
 
 ## Task B — що зробили агенти з серверами
 
-- **Supabase:** <заповнюється в Task B>
-- **Vercel:** <заповнюється в Task B>
-- **Figma:** <заповнюється в Task B>
-- Що агент зробив сам, без прохання: <заповнюється в Task B>
+- **Supabase:** інтерактивна сесія в корені репозиторію, у `/mcp` лише `supabase` (build: 9 інструментів).
+  Агент викликав `apply_migration` (`0001_leaddesk`, SQL з `supabase/migrations/0001_leaddesk.sql`) і `execute_sql`
+  (insert з `supabase/seed/leads.sql`); людина схвалила обидва вручну, нічого не відхиляла. Перевірка:
+  `select count(*) from leads` → 20. Роль: `select current_user, session_user, current_setting('is_superuser')` →
+  `postgres` / `postgres` / `off` — `execute_sql` ходить під `postgres`, але не superuser. Результат
+  `execute_sql` загорнуто в `<untrusted-data-…>` з попередженням не виконувати інструкцій (видно в
+  `docs/mcp/ab/a-generic.md`)
+- **Vercel:** проєкт створено імпортом форку в дашборді Vercel (git-інтеграція, Next.js за замовчуванням, без env),
+  production-деплой з `main` @ `958d2ee` — `READY`, білд 58 с. Сесія `claude -p` лише з `vercel`: `list_deployments`
+  (`app: 2026-quitcode-05-mcp-hw`) знайшов `dpl_4dZ2tfnU8JgC4DmJX2TQrbBUrg7f`. Інструмента
+  `get_deployment_build_logs` з walkthrough у сервері немає — лог віддає `list_deployment_events`
+  (`builds: 1, limit: -1`). Він тричі відповів `403 forbidden: Not authorized: Trying to access resource under scope
+  "thaioshko-6765s-projects"` (без scope, з `teamId`, зі `slug`); конектор «claude.ai Vercel» — той самий 403. Тому
+  `docs/mcp/evidence/vercel-build-log.txt` (76 рядків) знято зі сторінки деплою в дашборді (Build Logs) — у шапці
+  файлу це записано. `allow` виправлено: `get_deployment_build_logs` → `list_deployment_events`
+- **Figma:** `whoami` — план Starter, сіт Full (у ліміт не рахується). Квота: 3 виклики з 20 — `create_new_file`
+  і `use_figma` (власний файл `LeadDesk WS5 tokens`: колекція `LeadDesk` з 4 COLOR-змінними, стиль `Body/16`, фрейм
+  `Tokens` 320×200, node `1:8`) — до deny; `get_variable_defs` (`nodeId: 1:8`) — після deny. Токени — у
+  `docs/mcp/evidence/figma-tokens.json`. Знімок «до» — 41 інструмент, «після» — 37
+- **Що агент зробив сам, без прохання:**
+  - Figma: перед `use_figma` агент сам прочитав ресурс сервера `skill://figma/figma-use/SKILL.md`, бо той вимагає
+    «**MANDATORY prerequisite** — you MUST invoke this skill BEFORE every `use_figma` tool call». Інструкція від
+    вендора в даних сервера — модель її виконала. `create_new_file` сам підставив `planKey` команди з `whoami`
+  - Vercel: після 403 агент сам повторив виклик із `teamId` і `slug`, узятими з відповіді `list_deployments`;
+    `list_teams` не викликав. У відповіді на 403 сервер радив «Try an available mapped CLI fallback first»
+    (`vercel inspect --logs`) — `Bash` був заборонений, тож CLI не запускався; модель вигадала змінну `VERCEL_TOKEN`
+    у `.mcp.json`, якої там немає
 
 ## Task E (бонус)
 
