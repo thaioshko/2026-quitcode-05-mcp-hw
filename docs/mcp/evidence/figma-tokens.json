@@ -1,0 +1,7 @@
+{
+  "brand/primary": "#4f46e5",
+  "brand/surface": "#ffffff",
+  "text/primary": "#111827",
+  "status/won": "#16a34a",
+  "Body/16": "Font(family: \"Inter\", style: Regular, size: 16, weight: 400, lineHeight: 24, letterSpacing: 0)"
+}
