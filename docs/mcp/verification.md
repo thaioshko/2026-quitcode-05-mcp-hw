@@ -68,7 +68,7 @@
   (`app: 2026-quitcode-05-mcp-hw`) знайшов `dpl_4dZ2tfnU8JgC4DmJX2TQrbBUrg7f`. Інструмента
   `get_deployment_build_logs` з walkthrough у сервері немає — лог віддає `list_deployment_events`
   (`builds: 1, limit: -1`). Він тричі відповів `403 forbidden: Not authorized: Trying to access resource under scope
-  "thaioshko-6765s-projects"` (без scope, з `teamId`, зі `slug`); конектор «claude.ai Vercel» — той самий 403. Тому
+  "<особиста команда>"` (без scope, з `teamId`, зі `slug`); конектор «claude.ai Vercel» — той самий 403. Тому
   `docs/mcp/evidence/vercel-build-log.txt` (76 рядків) знято зі сторінки деплою в дашборді (Build Logs) — у шапці
   файлу це записано. `allow` виправлено: `get_deployment_build_logs` → `list_deployment_events`
 - **Figma:** `whoami` — план Starter, сіт Full (у ліміт не рахується). Квота: 3 виклики з 20 — `create_new_file`

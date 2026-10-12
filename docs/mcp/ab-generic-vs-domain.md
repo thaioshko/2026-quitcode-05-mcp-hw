@@ -2,14 +2,14 @@
 
 - **Інструмент і версія:** Claude Code 2.1.168, `claude -p` (headless), macOS
 - **Модель і рівень міркування (effort), однакові в обох прогонах:** `--model opus --effort high` →
-  `claude-opus-4-8` (записано в `init` кожного транскрипту). Найстарша модель, доступна в `/model` на цьому акаунті
+  `claude-opus-4-8` (записано в `init` кожного транскрипту). Найновіший Opus, який пропонує `/model` на цьому акаунті; сесія-оркестратор, що готувала прогони й писала звіти, працювала на іншій моделі (див. `verification.md`), у прогонах вона участі не брала
 - **Запити:** `materials/ab-prompts.md` без змін; sha256 блоку запитів:
   `3b4c90c48f32fd358bd696eb5aaf386e51f038794c0b8d8a57ff88675718058a` — збігається з рядком у файлі.
   Запити передано скриптом, який читає блок між лініями `---` і прибирає лише нумерацію «1. »
 - **Прогін A:** тека `../ws05-ab-a` (порожня, поза репозиторієм; `../leaddesk-ab-a` зайнята ще з WS4); команда:
   `claude mcp add --transport http supabase "https://mcp.supabase.com/mcp?project_ref=xysjkhudzfrgqmhpdcei&read_only=true&features=database,docs"`
 - **Прогін B:** тека `../ws05-ab-b` (порожня); команда:
-  `claude mcp add leaddesk -- node "/Users/taras-vasylhaioshko/Claude COde/2026-quitcode-05-mcp-hw/mcp/leaddesk-server/src/server.mjs"`
+  `claude mcp add leaddesk -- node "$REPO/mcp/leaddesk-server/src/server.mjs"` (`REPO` — абсолютний шлях до клону)
 - **Запуск кожного прогону:** нова сесія, `claude -p --session-id <нова> --strict-mcp-config --mcp-config '<рівно один сервер>'`,
   запити 2–6 — `claude -p --resume <та сама сесія>`, у порядку 1–6
 - **`/mcp` на початку сесії:** A — `supabase` (5 інструментів: `execute_sql`, `list_tables`, `list_extensions`,
