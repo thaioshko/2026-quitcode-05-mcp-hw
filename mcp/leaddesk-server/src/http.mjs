@@ -20,7 +20,11 @@ const checkOrigin = localhostOriginValidation();
 createServer(async (req, res) => {
   if (!checkHost(req, res)) return; // the guard has already answered 403
   if (!checkOrigin(req, res)) return;
-  await mcp(req, res);
+  try {
+    await mcp(req, res);
+  } catch {
+    if (!res.headersSent) res.writeHead(500).end();
+  }
 }).listen(PORT, HOST, () => {
   console.error(`leaddesk MCP over HTTP: http://${HOST}:${PORT}/mcp`);
 });

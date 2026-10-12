@@ -70,7 +70,7 @@ export const factory = () => {
     {
       title: "Змінити статус ліда",
       description:
-        "ЗМІНЮЄ ДАНІ: переводить один лід LeadDesk у новий статус і пише запис в аудит (хто, що, коли, з якого статусу в який і чому). " +
+        "ЗМІНЮЄ ДАНІ: переводить один лід LeadDesk у новий статус і пише запис в аудит (дія, лід, час, з якого статусу в який і чому). " +
         "Перед викликом покажіть людині лід, поточний і новий статус і причину та дочекайтеся її підтвердження. " +
         "Невідомий лід або той самий статус — помилка, нічого не змінюється. " +
         `Що означає кожен статус — у ресурсі ${STATUSES_URI}.`,
@@ -87,7 +87,7 @@ export const factory = () => {
           .max(500)
           .describe("Чому змінюємо статус, 3–500 символів: що сталося (дзвінок, відмова, підписання). Потрапляє в аудит"),
       },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
     },
     async (args) => {
       try {

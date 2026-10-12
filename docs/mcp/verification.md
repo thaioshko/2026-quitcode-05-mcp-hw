@@ -21,7 +21,7 @@
   ```
 
 - **`tools-list.json`:** рівно два інструменти. `leaddesk_find_leads` — `readOnlyHint: true`,
-  `openWorldHint: false`; `leaddesk_set_lead_status` — `readOnlyHint: false`, `destructiveHint: false`,
+  `openWorldHint: false`; `leaddesk_set_lead_status` — `readOnlyHint: false`, `destructiveHint: true` (перезаписує попередній статус),
   `idempotentHint: false`, `openWorldHint: false`. У кожного параметра є `description` з `.describe(…)`;
   `status` — `enum` рівно з `LEAD_STATUSES` (у пошуку ще `any`), `leadId` — `pattern: ^lead_\d{4}$`,
   `limit` — ціле 1–50, `default: 10`, `reason` — 3–500 символів. Опис `leaddesk_set_lead_status`
@@ -36,7 +36,7 @@
   «уже має статус new: змінювати нічого. Статус не змінено, запис в аудит не додано».
 - **`set-status.json`:** `lead_0002` (Rynok Books) `new` → `contacted`. Запис аудиту в
   `structuredContent.audit`:
-  `{ "action": "lead.status_changed", "leadId": "lead_0002", "at": "2026-10-12T20:07:07.678Z", "from": "new", "to": "contacted", "reason": "перевірка в Inspector" }`
+  `{ "action": "lead.status_changed", "leadId": "lead_0002", "at": "2026-10-12T20:18:42.556Z", "from": "new", "to": "contacted", "reason": "перевірка в Inspector" }`
   — форма `AuditEntry` з `lib/types.ts` плюс що змінилось і чому.
 - **`resource-read.json`:** `leaddesk://reference/statuses`, `mimeType: "text/markdown"`, таблиця
   п'яти статусів: що означає, хто і коли переводить.
@@ -94,6 +94,6 @@
   ```
 
 - **Висновок:** 200 / 403 / 403 / 400 (`-32020`) — як очікувано. Гварди треба викликати самому:
-  за walkthrough, опцію гвардів `toNodeHandler` мовчки ігнорує (сам я цього не перевіряв), і без явного виклику сервер на `127.0.0.1` відповідав би 200 на
+  перевірено: з гвардами, переданими опцією `toNodeHandler(…, { hostValidation: localhostHostValidation(), … })` (окрема копія на порту 3334), запит із `Host: evil.example` отримав HTTP 200 — `dist/index.mjs` пакета `@modelcontextprotocol/node` читає з опцій лише `maxRequestBodySize`. Без явного виклику сервер на `127.0.0.1` відповідав би 200 на
   запит, який браузер жертви надіслав би зі сторінки зловмисника через DNS rebinding. Автентифікації
   HTTP-варіант не має — він лише для локального запуску; назовні його не відкриваємо.
