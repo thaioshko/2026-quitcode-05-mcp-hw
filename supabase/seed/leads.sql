@@ -1,5 +1,6 @@
 -- Seed: the same 20 synthetic leads as materials/leads.json and mcp/leaddesk-server/fixtures/leads.json
 -- (lead_0001..lead_0020). Generated from materials/leads.json, values unchanged.
+-- Re-running it restores the original values (e.g. statuses changed during a run), so A/B starts from the fixture state.
 insert into public.leads (id, full_name, company, email, source, status, budget, message, created_at) values
   ('lead_0001', 'Andrii Melnyk', 'North Wind Yachts', 'andrii.melnyk1@example.test', 'facebook-ads', 'qualified', 2500, 'Плануємо редизайн і SEO. Бюджет обговорюється.', '2026-09-20T06:32:40.447Z'),
   ('lead_0002', 'Emma Kravets', 'Rynok Books', 'emma.kravets2@example.test', 'webinar', 'new', 500, 'Потрібна консультація щодо email-розсилок для постійних клієнтів.', '2026-09-13T00:52:02.043Z'),
@@ -21,4 +22,12 @@ insert into public.leads (id, full_name, company, email, source, status, budget,
   ('lead_0018', 'Sofiia Savchuk', 'Green Leaf Market', 'sofiia.savchuk18@example.test', 'google-ads', 'new', null, 'Хочемо чат-бот для відповідей на типові питання клієнтів.', '2026-07-18T05:08:24.837Z'),
   ('lead_0019', 'Dmytro Koval', 'Svitlo Solar', 'dmytro.koval19@example.test', 'website', 'new', 500, 'Маємо старий сайт на WordPress, хочемо перейти на щось швидше.', '2026-06-30T21:07:00.656Z'),
   ('lead_0020', 'Oleh Hoffmann', 'UrbanFit Studio', 'oleh.hoffmann20@example.test', 'referral', 'lost', 2500, 'Шукаємо підрядника на налаштування реклами на осінній сезон.', '2026-07-24T12:31:19.113Z')
-on conflict (id) do nothing;
+on conflict (id) do update set
+  full_name  = excluded.full_name,
+  company    = excluded.company,
+  email      = excluded.email,
+  source     = excluded.source,
+  status     = excluded.status,
+  budget     = excluded.budget,
+  message    = excluded.message,
+  created_at = excluded.created_at;
