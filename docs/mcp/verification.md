@@ -68,9 +68,13 @@
   (`app: 2026-quitcode-05-mcp-hw`) знайшов `dpl_4dZ2tfnU8JgC4DmJX2TQrbBUrg7f`. Інструмента
   `get_deployment_build_logs` з walkthrough у сервері немає — лог віддає `list_deployment_events`
   (`builds: 1, limit: -1`). Він тричі відповів `403 forbidden: Not authorized: Trying to access resource under scope
-  "<особиста команда>"` (без scope, з `teamId`, зі `slug`); конектор «claude.ai Vercel» — той самий 403. Тому
-  `docs/mcp/evidence/vercel-build-log.txt` (76 рядків) знято зі сторінки деплою в дашборді (Build Logs) — у шапці
-  файлу це записано. `allow` виправлено: `get_deployment_build_logs` → `list_deployment_events`
+  "<особиста команда>"` (без scope, з `teamId`, зі `slug`); конектор «claude.ai Vercel» — той самий 403. Перша версія
+  логу була знята зі сторінки деплою в дашборді із сесії, де був браузер і конектор «claude.ai Supabase» (відступ,
+  див. `connections.md`). **Після рев'ю CodeRabbit лог знято повторно** в окремій сесії `claude -p` **без жодного
+  MCP-сервера** (`--strict-mcp-config --mcp-config '{"mcpServers":{}}'`: ні конекторів claude.ai, ні браузера), з
+  `Bash`, дозволеним рівно для однієї команди `vercel inspect dpl_4dZ2tfnU8JgC4DmJX2TQrbBUrg7f --logs` (особистий
+  логін Vercel CLI; це той самий CLI-шлях, на який вказував сервер у відповіді на 403). Результат — у
+  `docs/mcp/evidence/vercel-build-log.txt`, дослівно, крім назви команди в рядку «Fetching». `allow` виправлено: `get_deployment_build_logs` → `list_deployment_events`
 - **Figma:** `whoami` — план Starter, сіт Full (у ліміт не рахується). Квота: 3 виклики з 20 — `create_new_file`
   і `use_figma` (власний файл `LeadDesk WS5 tokens`: колекція `LeadDesk` з 4 COLOR-змінними, стиль `Body/16`, фрейм
   `Tokens` 320×200, node `1:8`) — до deny; `get_variable_defs` (`nodeId: 1:8`) — після deny. Токени — у
